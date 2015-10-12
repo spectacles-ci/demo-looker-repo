@@ -23,7 +23,7 @@ Looker can connect to any SQL-compliant database for you to build out a demo env
 </p>
 
 <p style="font-weight: 300">
-<strong>1.</strong> Connect to your database follow the instructions <a href = "http://www.looker.com/docs/admin/looker-hosted" style="text-decoration:underline">here</a> to establish a connection between Looker and your databse
+<strong>1.</strong> Connect to your database follow the instructions <a href = "http://www.looker.com/docs/admin/looker-hosted" style="text-decoration:underline">here</a> to establish a connection between Looker and your database
 </p>
 
 <p style="font-weight: 300">

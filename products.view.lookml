@@ -13,7 +13,7 @@
     sql: ${TABLE}.brand     #  we want a top level entity.
     html: |
       {{ linked_value }}
-      <a href="/dashboards/2?brand={{ value }}" target="_new">
+      <a href="/dashboards/thelook/2_brand_overview?brand={{ value }}" target="_new">
       <img src="/images/qr-graph-line@2x.png" height=20 width=20></a>
  
   - dimension: category_name    # We want category to be a top level entity even though doesn't
@@ -21,7 +21,7 @@
     sql: ${TABLE}.category      #  have its own table
     html: |
       {{ linked_value }}
-      <a href="/dashboards/3?category={{ value  }}" target="_new">
+      <a href="/dashboards/thelook/3_category_lookup?category={{ value  }}" target="_new">
       <img src="/images/qr-graph-line@2x.png" height=20 width=20></a>
 #       <img src="http://s1.huffpost.com/images/v/linkout_image.png" width=8 height=8></a>
 

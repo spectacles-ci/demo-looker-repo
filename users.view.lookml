@@ -4,7 +4,7 @@
 # DIMENSIONS # 
 
   - dimension: id
-    type: int
+    type: number
     primary_key: true
     sql: ${TABLE}.id 
 
@@ -13,7 +13,7 @@
     
   - measure: average_age
     type: average
-    decimals: 2
+    value_format_name: decimal_2
     sql: ${age}
 
   - dimension: age_tier
@@ -69,7 +69,7 @@
     label: Count (Percent of Total)
     type: percent_of_total
     drill_fields: detail*
-    decimals: 1
+    value_format_name: decimal_1
     sql: ${count}
 
 

@@ -51,7 +51,7 @@
  
   # these next two dimensions dyanmically builds an image file based on the product_id fior image dashboard
   - dimension: image_file
-    sql: (concat('http://www.looker.com/_content/docs/99-hidden/images/image_',${id},'.png'))
+    sql: (concat('http://www.looker.com/_content/docs/images/image_',${id},'.png'))
 
   - dimension: product_image
     sql: ${image_file}

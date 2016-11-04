@@ -5,14 +5,16 @@
   layout: grid
   rows:
     - elements: [total_orders, average_order_profit, first_purchasers]
-      height: 220
-    - elements: [orders_by_day_and_category, sales_by_date]
+      height: 180
+    - elements: [orders_by_day_and_category, yoy_sales]
       height: 400
-    - elements: [top_zips_map, sales_state_map]
+    - elements: [sales_state_map, top_zips_map]
       height: 400
     - elements: [sales_by_date_and_category, top_10_brands]
       height: 400
-    - elements: [layer_cake_cohort]
+    - elements: [cohort_text]
+      height: 150
+    - elements: [layer_cake_cohort, cum_cohort]
       height: 400
     - elements: [customer_cohort]
       height: 400
@@ -25,10 +27,11 @@
     default_value: Last 90 Days
 
   - name: state
-    title: 'State / Region'
+    title: 'State'
     type: field_filter
     explore: users
     field: users.state
+
 
 
   elements:
@@ -84,65 +87,168 @@
     x_axis_datetime_tick_count: 4
     show_x_axis_label: false
 
-  - name: sales_by_date
-    title: "Sales by Date"
-    type: looker_column
+  - name: yoy_sales
+    title: "Year over Year Sales"
+    type: looker_line
+    model: thelook
     explore: order_items
-    dimensions: [orders.created_date]
+    dimensions: [orders.created_year, orders.created_month_name]
+    pivots: [orders.created_year]
+    fill_fields: [orders.created_year, orders.created_month_name]
     measures: [order_items.total_sale_price]
-    listen:
-      state: users.state
-      date: orders.created_date
-    sorts: [orders.created_date]
-    limit: 30
-    colors: ["#651F81"]
-    reference_lines:
-      - value: [max, mean]
-        label: Above Average
-        color: "#Ef7F0F"
-      - value: 20000
-        label: Target
-        color: "#Ef7F0F"
-      - value: [median]
-        label: Median
-        color: "#Ef7F0F"
-    x_axis_scale: time
-    x_axis_datetime_tick_count: 4
-    y_axis_labels: "Total Sale Price ($)"
-    y_axis_combined: yes
-    show_x_axis_label: false
-    hide_legend: yes
-    hide_points: yes
+    filters:
+      orders.created_date: before 0 months ago
+      orders.created_year: after 2012/01/01
+    sorts: [orders.created_year, orders.created_year, orders.created_month_name]
+    limit: '500'
+    column_limit: '50'
+    query_timezone: America/Los_Angeles
+    stacking: ''
+    show_value_labels: false
+    label_density: 25
+    legend_position: center
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: true
+    limit_displayed_rows: false
+    y_axis_combined: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    x_axis_scale: auto
+    y_axis_scale_mode: linear
+    show_null_points: false
+    point_style: none
+    interpolation: linear
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: '#808080'
+    series_colors: {}
+    series_types: {}
+    hidden_series: []
+    colors: ['#651F81', '#80237D', '#C488DD', '#Ef7F0F', '#FEAC47', '#8ED1ED']
+
 
   - name: top_zips_map
     title: "Top Zip Codes"
-    type: looker_geo_coordinates
-    map: usa
+    type: looker_map
+    model: thelook
     explore: order_items
-    dimensions: [users.zipcode]
+    dimensions: [users.zip]
     measures: [order_items.count]
-    colors: [gold, orange, darkorange, orangered, red]
+    filters:
+      users.is_lower_48: yes
     listen:
       date: orders.created_date
       state: users.state
-    point_color: "#651F81"
-    point_radius: 3
     sorts: [order_items.count desc]
-    limit: 500
+    limit: '500'
+    column_limit: '50'
+    query_timezone: America/Los_Angeles
+    map_plot_mode: points
+    heatmap_gridlines: false
+    heatmap_opacity: 1
+    show_region_field: true
+    draw_map_labels_above_data: true
+    map_tile_provider: positron
+    map_position: custom
+    map_scale_indicator: 'off'
+    map_pannable: true
+    map_zoomable: true
+    map_marker_type: circle
+    map_marker_icon_name: default
+    map_marker_radius_mode: proportional_value
+    map_marker_units: meters
+    map_marker_proportional_scale_type: linear
+    map_marker_color_mode: fixed
+    show_view_names: false
+    show_legend: true
+    quantize_map_value_colors: false
+    map: usa
+    colors: [gold, orange, darkorange, orangered, red]
+    point_color: '#651F81'
+    point_radius: 3
+    map_projection: ''
+    series_types: {}
+    map_latitude: 38.03078569382294
+    map_longitude: -98.8330078125
+    map_zoom: 4
+
 
   - name: sales_state_map
     title: "Sales by State"
-    type: looker_geo_choropleth
-    map: usa
+    type: looker_map
+    model: thelook
     explore: order_items
     dimensions: [users.state]
-    measures: [order_items.count]
-    colors: "#651F81"
-    sorts: [order_items.total_sale_price desc]
+    measures: [order_items.total_sale_price]
+    filters:
+      users.is_lower_48: yes
     listen:
       date: orders.created_date
       state: users.state
-    limit: 500
+    sorts: [order_items.total_sale_price desc]
+    limit: '500'
+    column_limit: '50'
+    query_timezone: America/Los_Angeles
+    map_plot_mode: points
+    heatmap_gridlines: true
+    heatmap_opacity: 0.5
+    show_region_field: true
+    draw_map_labels_above_data: false
+    map_tile_provider: positron
+    map_position: fit_data
+    map_scale_indicator: 'off'
+    map_pannable: true
+    map_zoomable: true
+    map_marker_type: circle
+    map_marker_icon_name: default
+    map_marker_radius_mode: proportional_value
+    map_marker_units: meters
+    map_marker_proportional_scale_type: linear
+    map_marker_color_mode: fixed
+    show_view_names: false
+    show_legend: true
+    quantize_map_value_colors: false
+    stacking: ''
+    show_value_labels: false
+    label_density: 25
+    legend_position: center
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    limit_displayed_rows: false
+    y_axis_combined: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    x_axis_scale: auto
+    y_axis_scale_mode: linear
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: '#808080'
+    map: usa
+    colors: ['#651F81']
+    map_projection: ''
+    quantize_colors: false
+    series_types: {}
+    map_latitude: 39.027718840211605
+    map_longitude: -94.482421875
+    map_zoom: 3
+    map_value_colors: [green, red]
+    map_value_scale_clamp_min:
+    map_value_scale_clamp_max:
+    hidden_fields:
+
 
   - name: sales_by_date_and_category
     title: "Sales by Date and Category (Last 6 Weeks)"
@@ -190,6 +296,73 @@
     colors: ["#FF0000","#DE0000","#C90000","#9C0202","#800101","#6B0000","#4D006B","#0D0080","#080054","#040029","#000000"]
     stacking: normal
     hide_points: yes
+
+  - name: cohort_text
+    type: text
+    title_text: 'Cohort Analysis'
+    subtitle_text: 'Customers by Signup Month'
+#     body_text: 'body text'
+
+  - name: cum_cohort
+    title: Untitled Visualization
+    type: looker_line
+    model: thelook
+    explore: order_items
+    dimensions: [orders.months_since_user_created_sharp, users.created_month]
+    pivots: [users.created_month]
+    fill_fields: [users.created_month]
+    measures: [order_items.total_sale_price]
+    dynamic_fields:
+    - table_calculation: total_sale_price
+      label: Total Sale Price
+      expression: |-
+        if(
+        is_null(${order_items.total_sale_price})
+        ,null
+        ,running_total(${order_items.total_sale_price}))
+      value_format:
+      value_format_name: usd
+    filters:
+      orders.months_since_user_created_sharp: '[0, 12]'
+      users.created_month: 12 months ago for 12 months
+    sorts: [users.created_month, orders.months_since_user_created_sharp]
+    limit: '500'
+    column_limit: '50'
+    query_timezone: America/Los_Angeles
+    stacking: ''
+    show_value_labels: false
+    label_density: 25
+    legend_position: center
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    limit_displayed_rows: false
+    y_axis_combined: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    x_axis_scale: auto
+    y_axis_scale_mode: linear
+    show_null_points: false
+    point_style: none
+    interpolation: linear
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: '#808080'
+    hide_legend: false
+    series_colors: {}
+    series_types: {}
+    x_axis_label_rotation: 0
+    colors: ['#FF0000', '#DE0000', '#C90000', '#9C0202', '#800101', '#6B0000', '#4D006B',
+      '#0D0080', '#080054', '#040029', '#000000']
+    hidden_fields: [order_items.total_sale_price]
+
+
 
   - name: customer_cohort
     type: table
@@ -279,10 +452,10 @@
     show_view_names: false
     y_axis_combined: true
     show_x_axis_label: false
-    series_labels: 
+    series_labels:
       order_items.total_sale_price: Total Sales
       order_items.average_sale_price: Average Sale Price
-    series_colors: 
+    series_colors:
       order_items.total_sale_price: purple
       order_items.average_sale_price: orange
 
@@ -316,7 +489,7 @@
 #-----------------------------
   title: "3) Category Lookup"
   layout: grid
-  rows: 
+  rows:
     - elements: [total_orders, total_customers, average_order_value]
       height: 180
     - elements: [comparison, sales_by_day]
@@ -338,7 +511,7 @@
     type: field_filter
     explore: products
     field: products.department_name
-    
+
 
 
   - name: date
@@ -446,19 +619,19 @@
       height: 180
     - elements: [user_info, item_order_history, favorite_categories]
       height: 400
-  
+
   filters:
-  
+
   - name: email
     title: 'Email'
     type: field_filter
     explore: users
     field: users.email
-  
-  elements:   
-  
+
+  elements:
+
   - name: user_info
-    title: "User Info" 
+    title: "User Info"
     type: looker_single_record
     explore: order_items
     dimensions: [users.id, users.email, users.name, users.created_month, users.age,
@@ -466,19 +639,19 @@
     listen:
       email: users.email
     filters:
-      orders.created_date: 99 years      
+      orders.created_date: 99 years
     limit: 500
     show_null_labels: false
-      
+
   - name: lifetime_orders
-    title: "Lifetime Orders" 
+    title: "Lifetime Orders"
     type: single_value
     explore: order_items
     measures: [orders.count]
     listen:
       email: users.email
     filters:
-      orders.created_date: 99 years      
+      orders.created_date: 99 years
     sorts: [orders.count desc]
     limit: 500
     show_null_labels: false
@@ -490,40 +663,40 @@
     measures: [order_items.count]
     filters:
     listen:
-      email: users.email    
+      email: users.email
     filters:
-      orders.created_date: 99 years      
+      orders.created_date: 99 years
     sorts: [order_items.count desc]
     limit: 500
     show_null_labels: false
 
   - name: lifetime_spend
-    title: "Lifetime Spend" 
+    title: "Lifetime Spend"
     type: single_value
     explore: order_items
     measures: [order_items.total_sale_price]
     listen:
       email: users.email
     filters:
-      orders.created_date: 99 years      
+      orders.created_date: 99 years
     sorts: [order_items.total_sale_price desc]
     limit: 500
     show_null_labels: false
 
   - name: item_order_history
-    title: "Items Order History" 
+    title: "Items Order History"
     type: table
     explore: order_items
     dimensions: [products.item_name]
     listen:
       email: users.email
     filters:
-      orders.created_date: 99 years      
+      orders.created_date: 99 years
     sorts: [products.item_name]
     limit: 500
 
   - name: favorite_categories
-    title: "Favorite Categories" 
+    title: "Favorite Categories"
     type: looker_pie
     explore: order_items
     dimensions: [products.category_name]
@@ -534,7 +707,7 @@
       orders.created_date: 99 years
     sorts: [order_items.count desc]
     limit: 500
-    
+
 #----------------------------------------
 - dashboard: sample_dashboard_with_images
 #----------------------------------------
@@ -547,7 +720,7 @@
   rows:
   - height: 1000
     elements: [dashboard_with_images]
-  
+
   elements:
   - name: dashboard_with_images
     title: 'Product Dashboard with Images'

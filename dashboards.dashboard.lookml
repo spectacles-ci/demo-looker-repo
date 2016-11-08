@@ -304,7 +304,7 @@
 #     body_text: 'body text'
 
   - name: cum_cohort
-    title: Untitled Visualization
+    title: "Cohort - Cumulative Sales by User Sign Up Month"
     type: looker_line
     model: thelook
     explore: order_items

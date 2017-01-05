@@ -98,7 +98,7 @@
     measures: [order_items.total_sale_price]
     filters:
       orders.created_date: before 0 months ago
-      orders.created_year: after 2012/01/01
+      orders.created_year: after 3 years ago
     sorts: [orders.created_year, orders.created_year, orders.created_month_name]
     limit: '500'
     column_limit: '50'

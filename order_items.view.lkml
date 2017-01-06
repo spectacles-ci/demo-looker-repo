@@ -91,6 +91,6 @@ view: order_items {
   # SETS #
 
   set: detail {
-    fields: [orders.created_date, id, orders.id, users.name, users.history, products.item_name, brand.name, category.name, department.name, total_sale_price]
-  }
+    fields: [orders.created_date, id, orders.id, users.name, users.history, products.item_name, products.brand_name, products.category_name, total_sale_price]
+    }
 }

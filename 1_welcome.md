@@ -1,4 +1,4 @@
-<h1 style="padding-bottom:0px;color:#76678b;font-weight:500"><strong>Welcome to Looker</strong></h1>
+<h1 style="padding-bottom:0px;color:#76678b;font-weight:500">Welcome to Looker</h1>
 <p style="font-weight: 300">
 Your environment of Looker comes pre-loaded with a sample database connection, data model, and demo dashboards. You can also connect Looker to your own database to build out your own testing and demo environments.
 </p>
@@ -19,7 +19,7 @@ TheLook is a simulated e-commerce store that sells clothing for men and women. T
 <h1 style="padding-bottom:0px;color:#76678b;font-weight:500">Connecting to your own data set</h1>
 
 <p style="font-weight: 300">
-Looker can connect to any SQL-compliant database for you to build out a demo environment of your own, or build proof-of-concept analyses for your customers. 
+Looker can connect to any SQL-compliant database for you to build out a demo environment of your own, or build proof-of-concept analyses for your customers.
 </p>
 
 <p style="font-weight: 300">
@@ -27,7 +27,7 @@ Looker can connect to any SQL-compliant database for you to build out a demo env
 </p>
 
 <p style="font-weight: 300">
-<strong>2.</strong> Create a new LookML project using the LookML generator. Instructions <a href = "http://www.looker.com/docs/data-modeling/getting-started/connect-to-db-and-generate-model" style="text-decoration:underline">here</a> 
+<strong>2.</strong> Create a new LookML project using the LookML generator. Instructions <a href = "http://www.looker.com/docs/data-modeling/getting-started/connect-to-db-and-generate-model" style="text-decoration:underline">here</a>
 </p>
 
 

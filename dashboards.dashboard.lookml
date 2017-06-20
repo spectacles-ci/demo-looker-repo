@@ -1,107 +1,143 @@
 #----------------------------
 - dashboard: 1_business_pulse
-#----------------------------
+#---------------------------
+
   title: "1) Business Pulse"
-  layout: grid
-  rows:
-    - elements: [total_orders, average_order_profit, first_purchasers]
-      height: 180
-    - elements: [orders_by_day_and_category, yoy_sales]
-      height: 400
-    - elements: [sales_state_map, top_zips_map]
-      height: 400
-    - elements: [sales_by_date_and_category, top_10_brands]
-      height: 400
-    - elements: [cohort_text]
-      height: 150
-    - elements: [layer_cake_cohort, cum_cohort]
-      height: 400
-    - elements: [customer_cohort]
-      height: 400
-
-  filters:
-
-  - name: date
-    title: "Date"
-    type: date_filter
-    default_value: Last 90 Days
-
-  - name: state
-    title: 'State'
-    type: field_filter
-    explore: users
-    field: users.state
-
-
-
+  layout: newspaper
   elements:
-
-  - name: total_orders
-    type: single_value
+  - name: Cohort Analysis
+    type: text
+    title_text: Cohort Analysis
+    subtitle_text: Customers by Signup Month
+    row: 30
+    col: 0
+    width: 24
+    height: 3
+  - name: Logo
+    type: text
+    title_text: <img src="https://avatars2.githubusercontent.com/u/1437874?v=3&s=400"
+      >
+    body_text: ''
+    row: 0
+    col: 0
+    width: 6
+    height: 6
+  - name: ''
+    type: text
+    title_text: ''
+    body_text: |-
+      <strong> <font size="4">Pulse Metrics</font></strong> <br>
+      For more granular info, see these dashboards:<br>
+      [1) Brand Overview](/dashboards/thelook::2_brand_overview) <br>
+      [2) Category Lookup](/dashboards/thelook::3_category_lookup)<br>
+      <a href="/dashboards/thelook::4_user_lookup">3) User Lookup</a>
+      <br>
+      Or check out our internal [docs](https://looker.com/docs) for more info!
+    row: 0
+    col: 6
+    width: 6
+    height: 6
+  - name: Average Order Profit
+    label: Average Order Profit
+    model: thelook
     explore: orders
-    measures: [orders.count]
-    listen:
-      date: orders.created_date
-      state: users.state
-    font_size: medium
-
-  - name: average_order_profit
     type: single_value
-    explore: orders
-    measures: [orders.average_order_profit]
-    listen:
-      date: orders.created_date
-      state: users.state
+    fields:
+    - orders.average_order_profit
     font_size: medium
-
-  - name: first_purchasers
-    type: single_value
-    explore: orders
-    measures: [orders.first_purchase_count]
     listen:
-      date: orders.created_date
-      state: users.state
-    font_size: medium
-
-  - name: orders_by_day_and_category
-    title: "Orders by Day and Category"
-    type: looker_area
-    explore: order_items
-    dimensions: [orders.created_date]
-    pivots: [products.category_name]
-    measures: [order_items.count]
-    filters:
-      products.category_name: Blazers & Jackets, Sweaters, Pants, Shorts, Fashion Hoodies & Sweatshirts, Accessories
-    listen:
-      date: orders.created_date
-      state: users.state
-    sorts: [orders.created_date]
-    limit: 500
-    colors: ["#651F81", "#80237D", "#C488DD", "#Ef7F0F", "#FEAC47", "#8ED1ED"]
-    legend_align:
-    y_axis_labels: "# Order Items"
-    stacking: normal
-    x_axis_datetime: yes
-    hide_points: yes
-    hide_legend: yes
-    x_axis_datetime_tick_count: 4
-    show_x_axis_label: false
-
-  - name: yoy_sales
-    title: "Year over Year Sales"
-    type: looker_line
+      Date: orders.created_date
+      State: users.state
+    row: 3
+    col: 18
+    width: 6
+    height: 3
+  - name: Orders by Day and Category
+    label: Orders by Day and Category
     model: thelook
     explore: order_items
-    dimensions: [orders.created_year, orders.created_month_name]
-    pivots: [orders.created_year]
-    fill_fields: [orders.created_year, orders.created_month_name]
-    measures: [order_items.total_sale_price]
+    type: looker_area
+    fields:
+    - orders.created_date
+    - order_items.count
+    - products.category_name
+    pivots:
+    - products.category_name
+    filters:
+      products.category_name: Blazers & Jackets,Sweaters,Pants,Shorts,Fashion Hoodies
+        & Sweatshirts,Accessories
+    sorts:
+    - orders.created_date
+    - products.category_name
+    limit: 500
+    column_limit: 50
+    colors:
+    - "#651F81"
+    - "#80237D"
+    - "#C488DD"
+    - "#Ef7F0F"
+    - "#FEAC47"
+    - "#8ED1ED"
+    legend_align:
+    y_axis_labels:
+    - "# Order Items"
+    stacking: normal
+    x_axis_datetime: true
+    hide_points: true
+    hide_legend: false
+    x_axis_datetime_tick_count: 4
+    show_x_axis_label: false
+    show_value_labels: false
+    label_density: 25
+    legend_position: center
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: true
+    limit_displayed_rows: false
+    y_axis_combined: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_ticks: true
+    x_axis_scale: auto
+    y_axis_scale_mode: linear
+    show_null_points: true
+    point_style: none
+    interpolation: linear
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    listen:
+      Date: orders.created_date
+      State: users.state
+    row: 6
+    col: 0
+    width: 14
+    height: 8
+  - name: Year over Year Sales
+    label: Year over Year Sales
+    model: thelook
+    explore: order_items
+    type: looker_line
+    fields:
+    - orders.created_year
+    - orders.created_month_name
+    - order_items.total_sale_price
+    pivots:
+    - orders.created_year
+    fill_fields:
+    - orders.created_year
+    - orders.created_month_name
     filters:
       orders.created_date: before 0 months ago
       orders.created_year: after 3 years ago
-    sorts: [orders.created_year, orders.created_year, orders.created_month_name]
-    limit: '500'
-    column_limit: '50'
+    sorts:
+    - orders.created_year
+    - orders.created_year
+    - orders.created_month_name
+    limit: 500
+    column_limit: 50
     query_timezone: America/Los_Angeles
     stacking: ''
     show_value_labels: false
@@ -127,74 +163,163 @@
     show_null_labels: false
     show_totals_labels: false
     show_silhouette: false
-    totals_color: '#808080'
+    totals_color: "#808080"
     series_colors: {}
     series_types: {}
     hidden_series: []
-    colors: ['#651F81', '#80237D', '#C488DD', '#Ef7F0F', '#FEAC47', '#8ED1ED']
-
-
-  - name: top_zips_map
-    title: "Top Zip Codes"
-    type: looker_map
-    model: thelook
-    explore: order_items
-    dimensions: [users.zip]
-    measures: [order_items.count]
-    filters:
-      users.is_lower_48: yes
+    colors:
+    - "#651F81"
+    - "#80237D"
+    - "#C488DD"
+    - "#Ef7F0F"
+    - "#FEAC47"
+    - "#8ED1ED"
     listen:
-      date: orders.created_date
-      state: users.state
-    sorts: [order_items.count desc]
-    limit: '500'
-    column_limit: '50'
-    query_timezone: America/Los_Angeles
-    map_plot_mode: points
-    heatmap_gridlines: false
-    heatmap_opacity: 1
-    show_region_field: true
-    draw_map_labels_above_data: true
-    map_tile_provider: positron
-    map_position: custom
-    map_scale_indicator: 'off'
-    map_pannable: true
-    map_zoomable: true
-    map_marker_type: circle
-    map_marker_icon_name: default
-    map_marker_radius_mode: proportional_value
-    map_marker_units: meters
-    map_marker_proportional_scale_type: linear
-    map_marker_color_mode: fixed
+      State: users.state
+    row: 6
+    col: 14
+    width: 10
+    height: 8
+  - name: New Users
+    label: New Users
+    model: thelook
+    explore: orders
+    type: single_value
+    fields:
+    - orders.first_purchase_count
+    column_limit: 50
+    font_size: medium
+    custom_color_enabled: false
+    custom_color: forestgreen
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    listen:
+      Date: orders.created_date
+      State: users.state
+    row: 0
+    col: 12
+    width: 6
+    height: 3
+  - name: Return Shopper Revenue
+    label: Return Shopper Revenue
+    model: thelook
+    explore: orders
+    type: single_value
+    fields:
+    - orders.total_returning_shopper_revenue
+
+    limit: 1000
+    column_limit: 50
+    font_size: medium
+    custom_color_enabled: false
+    custom_color: forestgreen
+    show_single_value_title: true
+    show_comparison: false
+    comparison_type: value
+    comparison_reverse_colors: false
+    show_comparison_label: true
+    listen:
+      Date: orders.created_date
+      State: users.state
+    row: 0
+    col: 18
+    width: 6
+    height: 3
+  - name: Return User Information
+    label: Return User Information
+    model: thelook
+    explore: orders
+    type: looker_column
+    fields:
+    - users_orders_facts.lifetime_number_of_orders_tier
+    - orders.average_order_profit
+    - users.average_age
+    sorts:
+    - users_orders_facts.lifetime_number_of_orders_tier
+    limit: 500
+    column_limit: 50
+    stacking: ''
+    show_value_labels: false
+    label_density: 25
+    legend_position: center
+    x_axis_gridlines: false
+    y_axis_gridlines: true
     show_view_names: false
-    show_legend: true
-    quantize_map_value_colors: false
-    map: usa
-    colors: [gold, orange, darkorange, orangered, red]
-    point_color: '#651F81'
-    point_radius: 3
-    map_projection: ''
-    series_types: {}
-    map_latitude: 38.03078569382294
-    map_longitude: -98.8330078125
-    map_zoom: 4
-
-
-  - name: sales_state_map
-    title: "Sales by State"
-    type: looker_map
+    limit_displayed_rows: false
+    y_axis_combined: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    x_axis_scale: auto
+    y_axis_scale_mode: linear
+    ordering: none
+    show_null_labels: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    series_types:
+      orders.average_order_profit: line
+    y_axes:
+    - label: ''
+      maxValue:
+      minValue:
+      orientation: left
+      showLabels: true
+      showValues: true
+      tickDensity: default
+      tickDensityCustom: 5
+      type: linear
+      unpinAxis: false
+      valueFormat:
+      series:
+      - id: users.average_age
+        name: Users Average Age
+    - label:
+      maxValue:
+      minValue:
+      orientation: right
+      showLabels: true
+      showValues: true
+      tickDensity: default
+      tickDensityCustom: 5
+      type: linear
+      unpinAxis: false
+      valueFormat:
+      series:
+      - id: orders.average_order_profit
+        name: Orders Average Order Profit
+    colors:
+    - "#651F81"
+    - "#C488DD"
+    - "#FEAC47"
+    - "#8ED1ED"
+    series_colors: {}
+    listen:
+      State: users.state
+    row: 14
+    col: 0
+    width: 11
+    height: 8
+  - name: Sales by State
+    label: Sales by State
     model: thelook
     explore: order_items
-    dimensions: [users.state]
-    measures: [order_items.total_sale_price]
+    type: looker_map
+    fields:
+    - users.state
+    - order_items.total_sale_price
     filters:
-      users.is_lower_48: yes
-    listen:
-      date: orders.created_date
-      state: users.state
-    sorts: [order_items.total_sale_price desc]
-    limit: '500'
-    column_limit: '50'
+      users.is_lower_48: 'Yes'
+    sorts:
+    - order_items.total_sale_price desc
+    limit: 500
+    column_limit: 50
     query_timezone: America/Los_Angeles
     map_plot_mode: points
     heatmap_gridlines: true
@@ -235,83 +360,156 @@
     show_null_labels: false
     show_totals_labels: false
     show_silhouette: false
-    totals_color: '#808080'
+    totals_color: "#808080"
     map: usa
-    colors: ['#651F81']
+    colors:
+    - "#651F81"
     map_projection: ''
     quantize_colors: false
     series_types: {}
     map_latitude: 39.027718840211605
     map_longitude: -94.482421875
     map_zoom: 3
-    map_value_colors: [green, red]
+    map_value_colors:
+    - green
+    - red
     map_value_scale_clamp_min:
     map_value_scale_clamp_max:
     hidden_fields:
-
-
-  - name: sales_by_date_and_category
-    title: "Sales by Date and Category (Last 6 Weeks)"
-    type: looker_donut_multiples
+    listen:
+      Date: orders.created_date
+      State: users.state
+    row: 14
+    col: 11
+    width: 13
+    height: 8
+  - name: Top 15 Brands
+    label: Top 15 Brands
+    model: thelook
     explore: order_items
-    dimensions: [orders.created_week]
-    pivots: [products.category_name]
-    measures: [order_items.count]
+    type: table
+    fields:
+    - products.brand_name
+    - order_items.count
+    - order_items.total_sale_price
+    - order_items.average_sale_price
+    sorts:
+    - order_items.count desc
+    limit: 15
+    listen:
+      Date: orders.created_date
+      State: users.state
+    row: 22
+    col: 12
+    width: 12
+    height: 8
+  - name: Sales by Date and Category (Last 6 Weeks)
+    label: Sales by Date and Category (Last 6 Weeks)
+    model: thelook
+    explore: order_items
+    type: looker_donut_multiples
+    fields:
+    - orders.created_week
+    - order_items.count
+    - products.category_name
+    pivots:
+    - products.category_name
     filters:
       orders.created_date: 6 weeks ago for 6 weeks
       products.category_name: Accessories, Active, Blazers & Jackets, Clothing Sets
-    sorts: [orders.created_week desc]
-    colors: ["#651F81","#EF7F0F","#555E61","#2DA7CE"]
+    sorts:
+    - orders.created_week desc
     limit: 24
+    colors:
+    - "#651F81"
+    - "#EF7F0F"
+    - "#555E61"
+    - "#2DA7CE"
     charts_across: 3
     show_value_labels: true
-
-  - name: top_10_brands
-    title: "Top 15 Brands"
-    type: table
-    explore: order_items
-    dimensions: [products.brand_name]
-    measures: [order_items.count, order_items.total_sale_price, order_items.average_sale_price]
     listen:
-      date: orders.created_date
-      state: users.state
-    sorts: [order_items.count desc]
-    limit: 15
-
-  - name: layer_cake_cohort
-    title: "Cohort - Orders Layered by Sign Up Month"
-    type: looker_area
+      State: users.state
+    row: 22
+    col: 0
+    width: 12
+    height: 8
+  - name: Cohort - Orders Layered by Sign Up Month
+    label: Cohort - Orders Layered by Sign Up Month
+    model: thelook
     explore: orders
-    dimensions: [orders.created_month]
-    pivots: [users.created_month]
-    measures: [orders.count]
+    type: looker_area
+    fields:
+    - orders.created_month
+    - orders.count
+    - users.created_month
+    pivots:
+    - users.created_month
     filters:
       orders.created_month: 12 months ago for 12 months
       users.created_month: 12 months ago for 12 months
-    sorts: [orders.created_month]
+    sorts:
+    - orders.created_month
     limit: 500
-    y_axis_labels: ["Number of orders"]
-    x_axis_label: "Order Month"
+    y_axis_labels:
+    - Number of orders
+    x_axis_label: Order Month
     legend_align: right
-    colors: ["#FF0000","#DE0000","#C90000","#9C0202","#800101","#6B0000","#4D006B","#0D0080","#080054","#040029","#000000"]
+    colors:
+    - "#FF0000"
+    - "#DE0000"
+    - "#C90000"
+    - "#9C0202"
+    - "#800101"
+    - "#6B0000"
+    - "#4D006B"
+    - "#0D0080"
+    - "#080054"
+    - "#040029"
+    - "#000000"
     stacking: normal
-    hide_points: yes
-
-  - name: cohort_text
-    type: text
-    title_text: 'Cohort Analysis'
-    subtitle_text: 'Customers by Signup Month'
-#     body_text: 'body text'
-
-  - name: cum_cohort
-    title: "Cohort - Cumulative Sales by User Sign Up Month"
-    type: looker_line
+    hide_points: true
+    listen:
+      State: users.state
+    row: 33
+    col: 0
+    width: 12
+    height: 8
+  - name: Total Orders
+    label: Total Orders
+    model: thelook
+    explore: orders
+    type: single_value
+    fields:
+    - orders.count
+    font_size: medium
+    listen:
+      Date: orders.created_date
+      State: users.state
+    row: 3
+    col: 12
+    width: 6
+    height: 3
+  - name: Cohort - Cumulative Sales by User Sign Up Month
+    label: Cohort - Cumulative Sales by User Sign Up Month
     model: thelook
     explore: order_items
-    dimensions: [orders.months_since_user_created_sharp, users.created_month]
-    pivots: [users.created_month]
-    fill_fields: [users.created_month]
-    measures: [order_items.total_sale_price]
+    type: looker_line
+    fields:
+    - orders.months_since_user_created_sharp
+    - users.created_month
+    - order_items.total_sale_price
+    pivots:
+    - users.created_month
+    fill_fields:
+    - users.created_month
+    filters:
+      orders.months_since_user_created_sharp: "[0, 12]"
+      users.created_month: 12 months ago for 12 months
+    sorts:
+    - users.created_month
+    - orders.months_since_user_created_sharp
+    limit: 500
+    column_limit: 50
     dynamic_fields:
     - table_calculation: total_sale_price
       label: Total Sale Price
@@ -322,12 +520,6 @@
         ,running_total(${order_items.total_sale_price}))
       value_format:
       value_format_name: usd
-    filters:
-      orders.months_since_user_created_sharp: '[0, 12]'
-      users.created_month: 12 months ago for 12 months
-    sorts: [users.created_month, orders.months_since_user_created_sharp]
-    limit: '500'
-    column_limit: '50'
     query_timezone: America/Los_Angeles
     stacking: ''
     show_value_labels: false
@@ -353,28 +545,74 @@
     show_null_labels: false
     show_totals_labels: false
     show_silhouette: false
-    totals_color: '#808080'
+    totals_color: "#808080"
     hide_legend: false
     series_colors: {}
     series_types: {}
     x_axis_label_rotation: 0
-    colors: ['#FF0000', '#DE0000', '#C90000', '#9C0202', '#800101', '#6B0000', '#4D006B',
-      '#0D0080', '#080054', '#040029', '#000000']
-    hidden_fields: [order_items.total_sale_price]
-
-
-
-  - name: customer_cohort
-    type: table
+    colors:
+    - "#FF0000"
+    - "#DE0000"
+    - "#C90000"
+    - "#9C0202"
+    - "#800101"
+    - "#6B0000"
+    - "#4D006B"
+    - "#0D0080"
+    - "#080054"
+    - "#040029"
+    - "#000000"
+    hidden_fields:
+    - order_items.total_sale_price
+    listen:
+      State: users.state
+    row: 33
+    col: 12
+    width: 12
+    height: 8
+  - name: Customer Cohort
+    label: Customer Cohort
+    model: thelook
     explore: orders
-    dimensions: [users.created_month]
-    pivots: [orders.created_month]
-    measures: [users.count]
+    type: table
+    fields:
+    - users.created_month
+    - users.count
+    - orders.created_month
+    pivots:
+    - orders.created_month
     filters:
       orders.created_month: 12 months ago for 12 months
       users.created_month: 12 months ago for 12 months
-    sorts: [users.created_month]
+    sorts:
+    - users.created_month
     limit: 500
+    listen:
+      State: users.state
+    row: 41
+    col: 0
+    width: 24
+    height: 8
+  filters:
+  - name: State
+    title: State
+    type: field_filter
+    default_value: ''
+    model: thelook
+    explore: users
+    field: users.state
+    listens_to_filters: []
+    allow_multiple_values: true
+  - name: Date
+    title: Date
+    type: date_filter
+    default_value: 90 days
+    model:
+    explore:
+    field:
+    listens_to_filters: []
+    allow_multiple_values: true
+
 
 #----------------------------
 - dashboard: 2_brand_overview

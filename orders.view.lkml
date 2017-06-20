@@ -228,7 +228,7 @@ view: orders {
   measure: total_returning_shopper_revenue {
     type: sum
     sql: ${total_amount_of_order_usd} ;;
-    value_format_name: decimal_2
+    value_format_name: usd_0
 
     filters: {
       field: is_first_purchase

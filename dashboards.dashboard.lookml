@@ -425,7 +425,7 @@
     - "#EF7F0F"
     - "#555E61"
     - "#2DA7CE"
-    charts_across: 3
+    charts_across:
     show_value_labels: true
     listen:
       State: users.state

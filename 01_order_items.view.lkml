@@ -44,19 +44,6 @@ view: order_items {
       value: "28 days"
     }}
 
-  measure: first_purchase_count {
-    view_label: "Orders"
-    type: count_distinct
-    sql: ${order_id} ;;
-
-    filters: {
-      field: order_facts.is_first_purchase
-      value: "Yes"
-    }
-
-    drill_fields: [user_id, order_id, created_date, users.traffic_source]
-  }
-
   dimension: order_id {
     type: number
     sql: ${TABLE}.order_id ;;
@@ -74,6 +61,10 @@ view: order_items {
       form_param: {
         name: "Message"
         type: textarea
+        default: "Hey,
+        Could you check out order #{{value}}. It's saying its {{status._value}},
+        but the customer is reaching out to us about it.
+        ~{{ _user_attributes.first_name}}"
       }
 
       form_param: {
@@ -333,6 +324,50 @@ view: order_items {
     }
   }
 
+    measure: first_purchase_count {
+      view_label: "Orders"
+      type: count_distinct
+      sql: ${order_id} ;;
+
+      filters: {
+        field: order_facts.is_first_purchase
+        value: "Yes"
+      }
+      # customized drill path for first_purchase_count
+      drill_fields: [user_id, order_id, created_date, users.traffic_source]
+      link: {
+        label: "New User's Behavior by Traffic Source"
+        url: "
+        {% assign vis_config = '{
+        \"type\": \"looker_column\",
+        \"show_value_labels\": true,
+        \"y_axis_gridlines\": true,
+        \"show_view_names\": false,
+        \"y_axis_combined\": false,
+        \"show_y_axis_labels\": true,
+        \"show_y_axis_ticks\": true,
+        \"show_x_axis_label\": false,
+        \"value_labels\": \"legend\",
+        \"label_type\": \"labPer\",
+        \"font_size\": \"13\",
+        \"colors\": [
+        \"#1ea8df\",
+        \"#a2dcf3\",
+        \"#929292\"
+        ],
+        \"hide_legend\": false,
+        \"y_axis_orientation\": [
+        \"left\",
+        \"right\"
+        ],
+        \"y_axis_labels\": [
+        \"Average Sale Price ($)\"
+        ]
+        }' %}
+        {{ hidden_first_purchase_visualization_link._link }}&vis_config={{ vis_config | encode_uri }}&sorts=users.average_lifetime_orders+descc&toggle=dat,pik,vis&limit=5000"
+      }
+    }
+
   measure: 30_day_repeat_purchase_rate {
     description: "The percentage of customers who purchase again within 30 days"
     view_label: "Repeat Purchase Facts"
@@ -396,6 +431,21 @@ view: order_items {
     hidden: yes
     sql: ${cohort_values_0} + ${cohort_values_1} ;;
   }
+
+
+#Hidden First Purchase Count To allow alternate drill path for custom drill with visualization
+    measure: hidden_first_purchase_visualization_link {
+      hidden: yes
+      view_label: "Orders"
+      type: count_distinct
+      sql: ${order_id} ;;
+
+      filters: {
+        field: order_facts.is_first_purchase
+        value: "Yes"
+      }
+      drill_fields: [users.traffic_source, user_order_facts.average_lifetime_revenue, user_order_facts.average_lifetime_orders]
+    }
 
 
 ##Aggregations for user_order_facts

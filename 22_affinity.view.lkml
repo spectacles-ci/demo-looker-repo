@@ -1,6 +1,6 @@
 view: affinity {
   derived_table: {
-    datagroup_trigger: ecommerce_etl
+    persist_for: "24 hours"  ## Best practice would be to use `datagroup_trigger: ecommerce_etl` but we don't here for snowflake costs
     sql: SELECT
         product_a_id
         , product_b_id
@@ -127,7 +127,7 @@ view: affinity {
 #Table that aggregates the products purchased by user and order id
 view: user_order_product {
   derived_table: {
-    datagroup_trigger: ecommerce_etl
+    persist_for: "24 hours"  ## Best practice would be to use `datagroup_trigger: ecommerce_etl` but we don't here for snowflake costs
 
     sql: SELECT
         oi.user_id AS user_id
@@ -167,7 +167,7 @@ view: user_order_product {
 #Table to count the total times a product id has been purchased
 view: total_order_product {
   derived_table: {
-    datagroup_trigger: ecommerce_etl
+    persist_for: "24 hours"  ## Best practice would be to use `datagroup_trigger: ecommerce_etl` but we don't here for snowflake costs
 
     sql: SELECT
         p.id AS prod_id

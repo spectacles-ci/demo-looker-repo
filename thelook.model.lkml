@@ -6,7 +6,7 @@ include: "*.view" # include all the views
 include: "*.dashboard" # include all the dashboards
 
 datagroup: ecommerce_etl {
-  ###Can be set to match your etl process
+  ### Datagroups Allow you to sync cache and Persisted Derived Tables to events like ETL
   sql_trigger: SELECT max(completed_at) FROM public.etl_jobs ;;
   max_cache_age: "24 hours"
 }

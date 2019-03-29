@@ -11,7 +11,7 @@ view: repeat_purchase_facts {
         AND order_items.created_at < repeat_order_items.created_at
       GROUP BY 1
        ;;
-    datagroup_trigger: ecommerce_etl
+    persist_for: "24 hours"  ## Best practice would be to use `datagroup_trigger: ecommerce_etl` but we don't here for snowflake costs
   }
 
   dimension: order_id {

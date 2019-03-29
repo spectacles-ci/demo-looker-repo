@@ -9,7 +9,7 @@ view: user_order_facts {
       column: latest_order {}
       column: number_of_distinct_months_with_orders {field: order_items.month_count}
     }
-    datagroup_trigger: ecommerce_etl
+    persist_for: "24 hours"  ## Best practice would be to use `datagroup_trigger: ecommerce_etl` but we don't here for snowflake costs
   }
 
   dimension: user_id {

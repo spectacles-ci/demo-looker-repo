@@ -1,7 +1,7 @@
 view: sessions {
   derived_table: {
 
-    sql_trigger_value: select max(created_at) from events ;;
+    persist_for: "24 hours"
     sql: SELECT
         session_id
         , MIN(created_at) AS session_start

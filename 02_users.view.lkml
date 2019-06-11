@@ -88,8 +88,8 @@ view: users {
 
   dimension: image_file {
     hidden: yes
-    sql: ('https://docs.looker.com/assets/images/'||${gender_short}||'.jpg') ;;
-  }
+    sql: ('https://randomuser.me/api/portraits/' || CASE WHEN ${gender_short} = 'm' THEN 'men' ELSE 'women' END || '/' || RIGHT(${id},1) || '.jpg' ) ;;
+    }
 
   ## Demographics ##
 

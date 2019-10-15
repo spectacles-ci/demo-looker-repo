@@ -395,14 +395,16 @@ view: order_items {
     type: time
     timeframes: [date]
     hidden: yes
-    sql: CAST(DATE_TRUNC({% parameter cohort_by %}, ${user_order_facts.first_order_date}) AS DATE)
+    sql: -- spectacles: ignore
+    CAST(DATE_TRUNC({% parameter cohort_by %}, ${user_order_facts.first_order_date}) AS DATE)
       ;;
   }
 
   dimension: periods_as_customer {
     type: number
     hidden: yes
-    sql: DATEDIFF({% parameter cohort_by %}, ${user_order_facts.first_order_date}, ${user_order_facts.latest_order_date})
+    sql: -- spectacles: ignore
+     DATEDIFF({% parameter cohort_by %}, ${user_order_facts.first_order_date}, ${user_order_facts.latest_order_date})
       ;;
   }
 

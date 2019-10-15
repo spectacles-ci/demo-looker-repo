@@ -162,7 +162,8 @@ view: users {
     # dummy field used in next dim
     hidden: yes
     type: number
-    sql: lpad(cast(round(random() * 10000, 0) as char(4)), 4, '0') ;;
+    sql: -- spectacles: ignore
+     lpad(cast(round(random() * 10000, 0) as char(4)), 4, '0') ;;
   }
 #   dimension: ssn_last_4 {
 #     label: "SSN Last 4"

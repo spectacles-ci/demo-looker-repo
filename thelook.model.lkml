@@ -1,6 +1,15 @@
 connection: "snowlooker"
 label: "1) eCommerce with Event Data"
 
+test: there_are_orders {
+  explore_source: order_items {
+    column: count {}
+  }
+  assert: there_is_data {
+    expression: ${order_items.count} > 0 ;;
+  }
+}
+
 
 include: "*.view" # include all the views
 include: "*.dashboard" # include all the dashboards

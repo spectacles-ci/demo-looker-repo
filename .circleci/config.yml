@@ -12,7 +12,7 @@ jobs:
           command: |
             git clone git@github.com:spectacles-ci/spectacles.git
             cd spectacles
-            pip3 install .
+            pip3 install . --user
 
       - run:
           name: spectacles connect

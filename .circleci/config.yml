@@ -10,17 +10,23 @@ jobs:
       - run:
           name: install spectacles
           command: |
+            python3 -m venv venv
+            . venv/bin/activate
             git clone git@github.com:spectacles-ci/spectacles.git
             cd spectacles
             pip3 install . --user
 
       - run:
           name: spectacles connect
-          command: spectacles connect -v
+          command: |
+            . venv/bin/activate
+            spectacles connect -v
 
       - run:
           name: spectacles sql
-          command: spectacles sql --project welcome_to_looker --branch $CIRCLE_BRANCH --batch -v
+          command: |
+            . venv/bin/activate 
+            spectacles sql --project welcome_to_looker --branch $CIRCLE_BRANCH --batch -v
 
 workflows:
   version: 2

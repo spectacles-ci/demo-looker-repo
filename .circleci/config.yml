@@ -1,16 +1,30 @@
 version: 2
 jobs:
-  build:
+  test:
     docker:
-      - image: debian:stretch
+      - image: circleci/python:3.7.0
 
     steps:
       - checkout
+      
+      - run:
+          name: install spectacles
+          command: |
+            git clone git@github.com:spectacles-ci/spectacles.git
+            cd spectacles
+            pip3 install .
 
       - run:
-          name: Greeting
-          command: echo Hello, world.
+          name: spectacles connect
+          command: spectacles connect -v
 
       - run:
-          name: Print the Current Time
-          command: date
+          name: spectacles sql
+          command: spectacles sql --project welcome_to_looker --branch $CIRCLE_BRANCH --batch -v
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+

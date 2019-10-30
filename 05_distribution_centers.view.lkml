@@ -12,6 +12,6 @@ view: distribution_centers {
   }
 
   dimension: name {
-    sql: ${TABLE}.name ;;
+    sql: ${TABLE}.name_error ;;
   }
 }

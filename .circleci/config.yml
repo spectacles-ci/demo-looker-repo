@@ -10,7 +10,7 @@ jobs:
       - run:
           name: install spectacles
           command: |
-            pip3 install git+https://github.com/spectacles-ci/spectacles.git@fix/expired-result
+            sudo pip3 install git+https://github.com/spectacles-ci/spectacles.git@fix/expired-result
 
       - run:
           name: spectacles connect

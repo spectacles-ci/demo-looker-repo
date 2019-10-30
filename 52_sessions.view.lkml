@@ -27,7 +27,7 @@ view: sessions {
   }
 
   dimension: session_id {
-    type: number
+    type: string
     primary_key: yes
     sql: ${TABLE}.session_id ;;
   }
@@ -41,7 +41,7 @@ view: sessions {
   }
 
   dimension: bounce_event_id {
-    sql: ${TABLE}.bounce_event_id ;;
+    sql: ${TABLE}.bounce_event_id_nope ;;
   }
 
   dimension_group: session_start {

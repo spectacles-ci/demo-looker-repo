@@ -6,13 +6,11 @@ jobs:
 
     steps:
       - checkout
-      
+
       - run:
           name: install spectacles
           command: |
-            git clone git@github.com:spectacles-ci/spectacles.git
-            cd spectacles
-            sudo pip3 install .
+            sudo pip3 install git+https://github.com/spectacles-ci/spectacles.git@fix/expired-result
 
       - run:
           name: spectacles connect
@@ -29,4 +27,3 @@ workflows:
   test:
     jobs:
       - test
-

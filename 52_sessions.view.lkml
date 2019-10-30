@@ -43,7 +43,7 @@ view: sessions {
   }
 
   dimension: bounce_event_id {
-    sql: ${TABLE}.bounce_event_id ;;
+    sql: ${TABLE}.bounce_id ;;
   }
 
   dimension_group: session_start {

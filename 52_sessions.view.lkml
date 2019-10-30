@@ -26,6 +26,8 @@ view: sessions {
     drill_fields: [detail*]
   }
 
+  # comment
+
   dimension: session_id {
     type: string
     primary_key: yes

@@ -4,6 +4,7 @@ view: order_items {
 
   dimension: id {
     primary_key: yes
+    description: "The ID of an ordered item."
     type: number
     sql: ${TABLE}.id ;;
   }
